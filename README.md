@@ -30,6 +30,10 @@ Qt 5 (and up) enabled FreeCAD build.
 ### Usage
 For toggling the overlay mode press the Q+1 key combination on the keyboard. Q+2 key combination can be used to toggle visibility.
 
+[A video on YouTube](https://www.youtube.com/watch?v=ny31diN1ZhM) was created by OficineRobotica demonstrating configuration and customization of Glass module.
+
+[![OficineRobotica FreeCAD Customization Using Glass](http://img.youtube.com/vi/ny31diN1ZhM/0.jpg)](http://www.youtube.com/watch?v=ny31diN1ZhM)
+
 ### Discussion
 Feedback can be posted to this [FreeCAD forum thread](https://forum.freecadweb.org/viewtopic.php?f=34&t=32397)
 
