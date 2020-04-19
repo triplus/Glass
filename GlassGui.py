@@ -20,6 +20,7 @@
 
 
 import FreeCADGui as Gui
+import FreeCAD
 from PySide import QtGui
 from PySide import QtCore
 
@@ -174,6 +175,8 @@ def onStart():
         timer.timeout.disconnect(onStart)
         findDock()
         createActions()
+        if FreeCAD.ParamGet("User parameter:BaseApp/Glass").GetBool("glassAuto",1):
+            setMode() # activate Glass mode
         timer.timeout.connect(onResize)
         timer.start(2000)
 
