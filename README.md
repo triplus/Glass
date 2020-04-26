@@ -28,9 +28,9 @@ Windows:
 Qt 5 (and up) enabled FreeCAD build.
 
 ### Usage
-For toggling the overlay mode press the Q+1 key combination on the keyboard. Q+2 key combination can be used to toggle visibility.
+Glass module will set defaults on the first run. For activating the Tree view an additional restart of FreeCAD might be needed. For toggling the overlay mode press the Q+1 key combination on the keyboard. Q+2 key combination can be used to toggle visibility.
 
-[A video on YouTube](https://www.youtube.com/watch?v=ny31diN1ZhM) was created by OficineRobotica demonstrating configuration and customization of Glass module.
+[A video on YouTube](https://www.youtube.com/watch?v=ny31diN1ZhM) was created by OficineRobotica demonstrating configuration and customization of Glass module. It is used as the default style for Glass and it is set on the first run.
 
 [![OficineRobotica FreeCAD Customization Using Glass](http://img.youtube.com/vi/ny31diN1ZhM/0.jpg)](http://www.youtube.com/watch?v=ny31diN1ZhM)
 

@@ -1,5 +1,5 @@
 # Glass module for FreeCAD
-# Copyright (C) 2018 triplus @ FreeCAD
+# Copyright (C) 2018, 2020 triplus @ FreeCAD
 #
 #
 # This library is free software; you can redistribute it and/or
@@ -27,13 +27,33 @@ from PySide import QtCore
 mode = 0
 wid = QtGui.QWidget()
 mw = Gui.getMainWindow()
-mdi = mw.findChild(QtGui.QMdiArea)
+p = FreeCAD.ParamGet("User parameter:BaseApp/Glass")
+
+
+try:
+    mw.setDockOptions(mw.dockOptions() | mw.GroupedDragging)
+except AttributeError:
+    pass
+
+
+def firstRun():
+    """Setup defaults on the first run."""
+    pTree = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/DockWindows/TreeView")
+    pTree.SetBool("Enabled", True)
+
+    pStyle = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/MainWindow")
+    pStyle.SetString("StyleSheet", "Dark-blue.qss")
+
+    pView = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/View")
+    pView.SetUnsigned("BackgroundColor2", 1852731135)
+    pView.SetUnsigned("BackgroundColor3", 2829625599)
+    pView.SetUnsigned("BackgroundColor4", 1852731135)
 
 
 def findDock():
     """Find combo view widget."""
     global dock
-    dock = mw.findChild(QtGui.QDockWidget, "Combo View")
+    dock = mw.findChild(QtGui.QDockWidget, "Tree view")
 
 
 def createActions():
@@ -75,9 +95,13 @@ def applyGlass(boolean, widget):
         pass
     try:
         if boolean:
-            widget.setStyleSheet("background:transparent; border:none; color:black;")
+            widget.setStyleSheet("background:transparent; border:none; color:white;")
         else:
             widget.setStyleSheet("")
+    except:
+        pass
+    try:
+        widget.setAutoFillBackground(boolean)
     except:
         pass
     try:
@@ -133,6 +157,7 @@ def widgetList(boolean):
 def setMode():
     """Set dock or overlay widget mode."""
     global mode
+    mdi = mw.findChild(QtGui.QMdiArea)
 
     if mode == 0:
         dock.setParent(mdi)
@@ -159,6 +184,8 @@ def setVisibility():
 
 def onResize():
     """Resize dock."""
+    mdi = mw.findChild(QtGui.QMdiArea)
+
     if mode == 1:
         x = 0
         y = 0
@@ -166,6 +193,11 @@ def onResize():
         h = (mdi.geometry().height() -
              mdi.findChild(QtGui.QTabBar).geometry().height())
         dock.setGeometry(x, y, w, h)
+
+    if str(Gui.activeView()) == "View3DInventor":
+        dock.show()
+    else:
+        dock.hide()
 
 
 def onStart():
@@ -175,10 +207,16 @@ def onStart():
         timer.timeout.disconnect(onStart)
         findDock()
         createActions()
-        if FreeCAD.ParamGet("User parameter:BaseApp/Glass").GetBool("glassAuto",1):
+        if p.GetBool("glassAuto", 1):
             setMode() # activate Glass mode
         timer.timeout.connect(onResize)
         timer.start(2000)
+
+
+if p.GetBool("FirstRun", 1):
+    """Setup defaults on the first run."""
+    firstRun()
+    p.SetBool("FirstRun", 0)
 
 
 timer = QtCore.QTimer()
