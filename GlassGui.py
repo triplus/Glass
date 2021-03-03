@@ -41,13 +41,13 @@ def firstRun():
     pTree = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/DockWindows/TreeView")
     pTree.SetBool("Enabled", True)
 
-    pStyle = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/MainWindow")
-    pStyle.SetString("StyleSheet", "Dark-blue.qss")
+    #pStyle = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/MainWindow")
+    #pStyle.SetString("StyleSheet", "Dark-blue.qss")
 
-    pView = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/View")
-    pView.SetUnsigned("BackgroundColor2", 1852731135)
-    pView.SetUnsigned("BackgroundColor3", 2829625599)
-    pView.SetUnsigned("BackgroundColor4", 1852731135)
+    #pView = FreeCAD.ParamGet("User parameter:BaseApp/Preferences/View")
+    #pView.SetUnsigned("BackgroundColor2", 1852731135)
+    #pView.SetUnsigned("BackgroundColor3", 2829625599)
+    #pView.SetUnsigned("BackgroundColor4", 1852731135)
 
 
 def findDock():
@@ -93,11 +93,18 @@ def applyGlass(boolean, widget):
         widget.setAttribute(QtCore.Qt.WA_TranslucentBackground, boolean)
     except:
         pass
+    transparent_classes = [QtGui.QScrollBar, QtGui.QLineEdit, QtGui.QAbstractButton, QtGui.QHeaderView, QtGui.QDockWidget]
+    
+    if not p.GetString("TextColor"):
+        p.SetString("TextColor", "black")
+    
+    pColor = p.GetString("TextColor")
+    
     try:
-        if boolean:
-            widget.setStyleSheet("background:transparent; border:none; color:white;")
+        if boolean and (widget.__class__ in transparent_classes) or (widget.objectName() in ['qt_scrollarea_hcontainer', 'qt_scrollarea_vcontainer']):
+            widget.setStyleSheet(f"background:transparent; border:none; color:{pColor};")
         else:
-            widget.setStyleSheet("")
+            widget.setStyleSheet(f"color:{pColor};")
     except:
         pass
     try:
@@ -151,8 +158,10 @@ def widgetList(boolean):
                         child = True
 
     for child in children:
-        applyGlass(boolean, child)
-
+        if isinstance(child, QtGui.QWidget):
+            applyGlass(boolean, child)
+    if boolean:
+        dock.setStyleSheet("")
 
 def setMode():
     """Set dock or overlay widget mode."""
@@ -189,7 +198,7 @@ def onResize():
     if mode == 1:
         x = 0
         y = 0
-        w = mdi.geometry().width() / 100 * 20
+        w = mdi.geometry().width() / 100 * 15
         h = (mdi.geometry().height() -
              mdi.findChild(QtGui.QTabBar).geometry().height())
         dock.setGeometry(x, y, w, h)
