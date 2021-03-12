@@ -228,6 +228,7 @@ if p.GetBool("FirstRun", 1):
     p.SetBool("FirstRun", 0)
 
 
-timer = QtCore.QTimer()
-timer.timeout.connect(onStart)
-timer.start(500)
+if (not FreeCAD.Version().__contains__("LinkStage3")):
+    timer = QtCore.QTimer()
+    timer.timeout.connect(onStart)
+    timer.start(500)
